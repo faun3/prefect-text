@@ -1,5 +1,5 @@
 from prefect import flow, task
-from sqlalchemy import Engine, True_, create_engine, text
+from sqlalchemy import Engine, create_engine, text
 from prefect.tasks import task_input_hash
 from prefect.blocks.system import Secret
 from datetime import timedelta
