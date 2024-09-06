@@ -1,29 +1,21 @@
 from prefect import flow, task
-from prefect_sqlalchemy import DatabaseCredentials
-
+from prefect_sqlalchemy import SqlAlchemyConnector
 
 
 @task
-def fetch_latest_10_rows_from_table(engine: Engine, table_name: str, order_by_col: str):
-    database_block = DatabaseCredentials.load("etl-staging-db")
-    with engine.connect() as connection:
-        query = text(f"SELECT * FROM {table_name} ORDER BY {order_by_col} DESC LIMIT 10")
-        res = connection.execute(query)
-        return res.fetchall()
+def fetch_data(block_name: str, table_name: str, order_by_col: str) -> list:
+    rows = []
+    with SqlAlchemyConnector.load(block_name) as connector:
+        rows = connector.fetch_many("SELECT * FROM {} ORDER BY {}".format(table_name, order_by_col), size=10)
+    return rows
 
 
 @flow(log_prints=True)
-def print_first_10_rows(engine: Engine, table_name: str, order_by_col: str):
-    rows = fetch_latest_10_rows_from_table(engine, table_name, order_by_col)
-
-    print(f"First 10 rows from {table_name} ordered by {order_by_col}:")
+def alchemy(block_name: str, table_name: str, order_by_col: str):
+    rows = fetch_data(block_name, table_name, order_by_col)
     for row in rows:
         print(row)
 
 
 if __name__ == "__main__":
-    engine = get_db_connection()
-    table_name = "qualifiedjob"
-    order_by_col = "processed_date"
-
-    print_first_10_rows(engine, table_name, order_by_col)
+    alchemy("etl-sqlalchemy-connector", "qualifiedjob", "processed_date")
