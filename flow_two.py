@@ -5,7 +5,6 @@ from prefect.blocks.system import Secret
 from datetime import timedelta
 
 
-@task(cache_key_fn=task_input_hash, cache_expiration=timedelta(days=1))
 def get_db_connection():
     conn_string = Secret.load("etl-staging-db-connection-string")
     engine = create_engine(conn_string)
