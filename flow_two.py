@@ -1,18 +1,11 @@
 from prefect import flow, task
-from sqlalchemy import Engine, create_engine, text
-from prefect.tasks import task_input_hash
-from prefect.blocks.system import Secret
-from datetime import timedelta
+from prefect_sqlalchemy import DatabaseCredentials
 
-
-def get_db_connection():
-    conn_string = Secret.load("etl-staging-db-connection-string")
-    engine = create_engine(conn_string)
-    return engine
 
 
 @task
 def fetch_latest_10_rows_from_table(engine: Engine, table_name: str, order_by_col: str):
+    database_block = DatabaseCredentials.load("etl-staging-db")
     with engine.connect() as connection:
         query = text(f"SELECT * FROM {table_name} ORDER BY {order_by_col} DESC LIMIT 10")
         res = connection.execute(query)
