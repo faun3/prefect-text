@@ -18,4 +18,8 @@ def alchemy(block_name: str, table_name: str, order_by_col: str):
 
 
 if __name__ == "__main__":
-    alchemy("etl-sqlalchemy-connector", "qualifiedjob", "processed_date")
+    alchemy(
+        block_name="etl-sqlalchemy-connector",
+        table_name="qualifiedjob",
+        order_by_col="processed_date"
+    )
