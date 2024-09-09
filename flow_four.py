@@ -12,5 +12,9 @@ def log_something(something: str) -> None:
 
 
 @flow(log_prints=True)
-def log_repo_info():
+def logger_logs():
     log_something("Hello, world!")
+
+
+if __name__ == "__main__":
+    logger_logs()
