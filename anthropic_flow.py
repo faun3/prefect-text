@@ -5,8 +5,12 @@ from lib.AnthropicWrapper import AnthropicWrapper
 
 @task
 def get_meaning_of_life():
-    meaning = AnthropicWrapper.prompt_and_answer()
-    return meaning
+    try:
+        meaning = AnthropicWrapper.prompt_and_answer()
+        return meaning
+    except Exception as e:
+        print(str(e))
+        return "42"
 
 
 @flow(log_prints=True)
