@@ -6,7 +6,7 @@ from prefect.logging import get_logger, get_run_logger
 def log_something(something: str) -> None:
     print(something)
     get_run_logger().info(something)
-    get_logger().info(something)
+    # get_logger().info(something)
 
 
 @flow
