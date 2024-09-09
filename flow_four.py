@@ -9,7 +9,7 @@ def log_something(something: str) -> None:
     get_logger().info(something)
 
 
-@flow(log_prints=True)
+@flow
 def logger_logs():
     log_something("Hello, world!")
 
